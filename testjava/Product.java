@@ -2,16 +2,14 @@ package testjava;
 
 public class Product {
     int number;//Количество
-    String name;//Название
     int price;//Цена
 
-    public Product (int number, String name, int price){
+    public Product (int number, int price){
         this.number=number;
-        this.name=name;
         this.price=price;
     }
 
-    public double calculateTheCost() {
+    public int calculateTheCost() {
         return (this.number*this.price);
     }
 }
