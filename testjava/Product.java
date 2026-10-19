@@ -10,6 +10,6 @@ public class Product {
     }
 
     public int calculateTheCost() {
-        return (this.number*this.price);
+        return this.price;
     }
 }

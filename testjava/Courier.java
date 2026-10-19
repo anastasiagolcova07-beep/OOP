@@ -1,10 +1,10 @@
 package testjava;
 
-public class Currier {
+public class Courier {
     int distanse;//Растояние
     boolean hasCar;//Есть машина
 
-    public Currier(int distanse, boolean hasCar){
+    public Courier(int distanse, boolean hasCar){
         this.distanse=distanse;
         this.hasCar=hasCar;
     }

@@ -1,9 +1,9 @@
 package testjava;
 
-public class DiliveryMan implements DiliveryType {
+public class DeliveryMan implements DeliveryType {
     
     @Override
-    public int timeOfDilivery(int distance){
+    public int timeOfDelivery(int distance){
         int speed=5;
         int errorTime=10;
         int time = (distance/speed)+errorTime;
@@ -12,5 +12,9 @@ public class DiliveryMan implements DiliveryType {
         System.out.println(" минут.");
 
         return time;
+    }
+    @Override
+    public int getDeliveryCost() {
+        return 100;
     }
 }
