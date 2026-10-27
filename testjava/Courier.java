@@ -1,15 +1,16 @@
 package testjava;
 
 public class Courier {
-    int distanse;//Растояние
-    boolean hasCar;//Есть машина
+    String name;
+    int distanse;
+    boolean hasCar;
+    boolean isBusy;
 
-    public Courier(int distanse, boolean hasCar){
+    public Courier(String name, int distanse, boolean hasCar, boolean isBusy){
+        this.name=name;
         this.distanse=distanse;
         this.hasCar=hasCar;
+        this.isBusy=isBusy;
     }
 
-    public boolean isArrived(){
-        return this.distanse==0;
-    }
 }

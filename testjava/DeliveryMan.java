@@ -3,14 +3,11 @@ package testjava;
 public class DeliveryMan implements DeliveryType {
     
     @Override
-    public int timeOfDelivery(int distance){
+    public int getTimeOfDelivery(int distance){
         int speed=5;
         int errorTime=10;
         int time = (distance/speed)+errorTime;
-        System.out.println("Ваш заказ будет доставлен в течении ");
-        System.out.print(time);
-        System.out.println(" минут.");
-
+        System.out.println("Ваш заказ будет доставлен на машине в течение " + time + " минут.");
         return time;
     }
     @Override

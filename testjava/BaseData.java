@@ -6,11 +6,11 @@ public class BaseData {
     public static final List<Product> products = new ArrayList<>();
 
     public static void toCreateCourier(){
-        Courier alex = new Courier(500, false);
-        Courier remi = new Courier(1000, true);
-        Courier sasha = new Courier(200, true);
-        Courier olga = new Courier(700, false);
-        Courier nyusha = new Courier(300, false);
+        Courier alex = new Courier("Alex",500, false, false);
+        Courier remi = new Courier("Remi",1000, true, false);
+        Courier sasha = new Courier("Sasha",200, true, false);
+        Courier olga = new Courier("Olga",700, false, false);
+        Courier nyusha = new Courier("Nyusha",300, false, false);
 
         couriers.add(alex);
         couriers.add(remi);
@@ -19,11 +19,11 @@ public class BaseData {
         couriers.add(nyusha);
     }
     public static void toCreateProduct(){
-        Product pizza = new Product(100,350);
-        Product sushi = new Product(80,1000);
-        Product burger = new Product(200,150);
-        Product soda = new Product(1000,70);
-        Product cake = new Product(30,200);
+        Product pizza = new Product(350);
+        Product sushi = new Product(1000);
+        Product burger = new Product(150);
+        Product soda = new Product(70);
+        Product cake = new Product(200);
 
         products.add(pizza);
         products.add(sushi);

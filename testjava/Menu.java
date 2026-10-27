@@ -1,5 +1,7 @@
 package testjava;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -7,6 +9,8 @@ public class Menu {
     private static final Scanner scanner = new Scanner(System.in);
 
     private static Order currentOrder = null; 
+
+    private static final List<Order> ordersList = new ArrayList<>();
 
     public static void startMenu() {
         boolean isRunning = true;
@@ -76,6 +80,13 @@ public class Menu {
             }
         }
 
+        if (currentOrder.isEmpty()) {
+            System.out.println("\nОшибка: Нельзя оформить заказ без продуктов! Возврат в главное меню.");
+            System.out.println("Нажмите Enter для продолжения...");
+            scanner.nextLine();
+            return;
+        }
+
         DeliveryType chosenDelivery = null;
         while (chosenDelivery == null) {
             System.out.println("\nДоставка: 1 - Стандарт, 2 - На машине, 3 - Самовывоз");
@@ -87,55 +98,134 @@ public class Menu {
                 currentOrder.setDeliveryType(chosenDelivery);
                 System.out.print("Введите адрес для пешего курьера: ");
                 scanner.nextLine();
+
+                Courier bestCourier = null;
+                for (Courier c : BaseData.couriers) {
+                    if (!c.hasCar && !c.isBusy) { 
+                        if (bestCourier == null || c.distanse < bestCourier.distanse) {
+                            bestCourier = c;
+                        }
+                    }
+                }
+
+                if (bestCourier == null) {
+                    System.out.println("Ошибка: Нет свободных пеших курьеров! Пожалуйста, выберите доставку на машине или самовывоз.");
+                    continue; 
+                }
+
+                chosenDelivery = new DeliveryMan();
+                currentOrder.setDeliveryType(chosenDelivery);
+                currentOrder.setAssignedCourier(bestCourier);
+                bestCourier.isBusy = true;
+
+                System.out.println("На заказ назначен ближайший курьер: " + bestCourier.name);
+                chosenDelivery.getTimeOfDelivery(bestCourier.distanse);
+
             } else if (deliveryChoice.equals("2")) {
                 chosenDelivery = new DeliveryCar();
                 currentOrder.setDeliveryType(chosenDelivery);
-                 System.out.print("Введите адрес для машины: ");
+                System.out.print("Введите адрес для машины: ");
                 scanner.nextLine();
+
+                Courier bestCourier = null;
+                for (Courier c : BaseData.couriers) {
+                    if (c.hasCar && !c.isBusy) { 
+                        if (bestCourier == null || c.distanse < bestCourier.distanse) {
+                            bestCourier = c;
+                        }
+                    }
+                }
+
+                 if (bestCourier == null) {
+                    System.out.println("Ошибка: Нет свободных курьеров на машине! Пожалуйста, выберите доставку пешком или самовывоз.");
+                    continue; 
+                }
+
+                chosenDelivery = new DeliveryCar();
+                currentOrder.setDeliveryType(chosenDelivery);
+                currentOrder.setAssignedCourier(bestCourier);
+                bestCourier.isBusy = true;
+
+                System.out.println("На заказ назначен ближайший курьер на машине: " + bestCourier.name);
+                chosenDelivery.getTimeOfDelivery(bestCourier.distanse);
             } else if (deliveryChoice.equals("3")) {
                 chosenDelivery = new SelfPickup();
                 currentOrder.setDeliveryType(chosenDelivery);
                 ((SelfPickup) chosenDelivery).delivery("ул. Главная, д. 10");
+                chosenDelivery.getTimeOfDelivery(0);
             } else {
                 System.out.println("Неверный выбор.");
             }
         }
 
-        System.out.println("\nЗаказ успешно оформлен и передан в обработку!");
-        System.out.print("Нажмите Enter, чтобы вернуться в меню...");
+        ordersList.add(currentOrder);
+        System.out.println("\nЗаказ №" + currentOrder.getId() + " успешно оформлен!");
+        System.out.println("Нажмите Enter, чтобы вернуться в меню...");
         scanner.nextLine();
     }
 
      private static void manageCurrentOrder() {
-        if (currentOrder == null) {
-            System.out.println("У вас пока нет активных заказов.");
-            System.out.print("Нажмите Enter для возврата...");
+        if (ordersList.isEmpty()) {
+            System.out.println("Активных заказов в системе нет.");
+            System.out.println("Нажмите Enter для возврата...");
             scanner.nextLine();
             return; 
         }
+        System.out.println("\n--- Список ваших заказов ---");
+        for (Order o : ordersList) {
+            System.out.println("Заказ №" + o.getId() + " [" + o.getStatus() + "]");
+        }
+        System.out.println("0 - Вернуться назад");
+        System.out.print("Введите НОМЕР ЗАКАЗА для работы с ним: ");
+        
+        String inputIdStr = scanner.nextLine();
+        if (inputIdStr.equals("0")) {
+            return;
+        }
 
-        currentOrder.printOrderInfo();
+        // Ищем выбранный заказ в списке по его ID
+        Order selectedOrder = null;
+        for (Order o : ordersList) {
+            if (String.valueOf(o.getId()).equals(inputIdStr)) {
+                selectedOrder = o;
+                break;
+            }
+        }
 
-        if (currentOrder.getStatus().equals("Доставлен / Завершен")) {
-            System.out.println("Этот заказ уже полностью выполнен.");
-            System.out.print("Нажмите Enter для возврата...");
+        if (selectedOrder == null) {
+            System.out.println("Заказ с таким номером не найден.");
+            System.out.println("Нажмите Enter...");
             scanner.nextLine();
         } 
         else {
-            System.out.println("Изменить статус?");
+            processOrderSelection(selectedOrder);
+        }
+    }
+
+    private static void processOrderSelection(Order order) {
+        order.printOrderInfo();
+
+        if (order.getStatus().equals("Доставлен / Завершен")) {
+            System.out.println("Этот заказ уже полностью выполнен.");
+            System.out.println("Нажмите Enter для возврата...");
+            scanner.nextLine();
+        } 
+        else {
+            System.out.println("Хотите продвинуть заказ №" + order.getId() + " на следующий этап?");
             System.out.println("1 - Да, изменить статус");
             System.out.println("2 - Нет, вернуться назад");
+            
             System.out.print("Ваш выбор: ");
             String choice = scanner.nextLine();
 
             if (choice.equals("1")) {
-                String oldStatus = currentOrder.getStatus();
-                currentOrder.nextStatus();
-                System.out.println("Статус успешно изменен с [" + oldStatus + "] на [" + currentOrder.getStatus() + "]");
+                String oldStatus = order.getStatus();
+                order.nextStatus(); 
+                System.out.println("Статус заказа №" + order.getId() + " изменен с [" + oldStatus + "] на [" + order.getStatus() + "]");
             } else {
-                System.out.println("Возврат в главное меню.");
+                System.out.println("Возврат.");
             }
-            System.out.print("Нажмите Enter для продолжения...");
+            System.out.println("Нажмите Enter для продолжения...");
             scanner.nextLine();
         }
     }

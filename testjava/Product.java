@@ -1,11 +1,9 @@
 package testjava;
 
 public class Product {
-    int number;//Количество
     int price;//Цена
 
-    public Product (int number, int price){
-        this.number=number;
+    public Product (int price){
         this.price=price;
     }
 

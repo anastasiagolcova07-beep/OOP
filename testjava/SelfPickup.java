@@ -7,7 +7,7 @@ public class SelfPickup implements DeliveryType {
     }
 
     @Override
-    public int timeOfDelivery(int distance) {
+    public int getTimeOfDelivery(int distance) {
         System.out.println("Заказ будет готов к выдаче через 20 минут.");
         return 20;
     }

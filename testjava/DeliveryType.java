@@ -2,6 +2,6 @@ package testjava;
 
 public interface DeliveryType {
 
-    int timeOfDelivery(int distance);
+    int getTimeOfDelivery(int distance);
     int getDeliveryCost();
 }
