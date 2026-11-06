@@ -1,0 +1,17 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\Tiona N\\Downloads\\logback-classic-1.6.5.jar",
+        "c:\\Users\\Tiona N\\Downloads\\logback-core-1.6.5.jar",
+        "c:\\Users\\Tiona N\\Downloads\\slf4j-api-2.0.20.jar"
+    ],
+    "terminal.integrated.profiles.windows": {
+        "PowerShell UTF-8": {
+            "source": "PowerShell",
+            "args": ["-NoExit", "-Command", "$OutputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; chcp 65001"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell UTF-8",
+    "java.debug.settings.vmArgs": "-Dfile.encoding=UTF-8"
+
+}
