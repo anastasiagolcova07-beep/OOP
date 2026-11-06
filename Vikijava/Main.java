@@ -8,6 +8,16 @@ public class Main {
 
     public static void main(String[] args) {
         
-        logger.info("Logback успешно подключен без сборщика!");
+        logger.info("Введите 0 для выхода\n");
+
+        Input inputReader = new Input();
+
+        String query = inputReader.getSearch();
+
+        while (!(query.equals("0"))){//query!="0"
+            logger.info("Успех! Программа приняла запрос: " + query);
+            query = inputReader.getSearch();
+        }
+        logger.info("\nДо свидания!");
     }
 }
