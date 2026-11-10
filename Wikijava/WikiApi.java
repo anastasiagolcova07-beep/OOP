@@ -24,11 +24,15 @@ public class WikiApi {
             String encodedQuery = URLEncoder.encode(searchQuery, StandardCharsets.UTF_8);
             
 
-            String url = "https://wikipedia.org" + encodedQuery;
-            logger.info("Сформирован URL: {}", url);
+            String base = "https://ru.wikipedia.org";
+            String params = "/w/api.php?action=query&list=search&utf8=&format=json&srsearch=";
+            String url = base + params + encodedQuery;
+            logger.debug("Сформирован URL: {}", url);
 
-            HttpRequest request = HttpRequest.newBuilder()
+            HttpRequest request = HttpRequest.newBuilder() 
                     .uri(URI.create(url))
+                    .header("User-Agent", "VikijavaStudentBot/1.0 (student@example.com)")
+                    .GET()
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

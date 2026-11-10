@@ -2,6 +2,7 @@ package Wikijava;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.List;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -16,17 +17,25 @@ public class Main {
 
 
         while (!(query.equals("0"))){//query!="0"
-            logger.info("Успех! Программа приняла запрос: " + query);
+            logger.debug("Успех! Программа приняла запрос: " + query);
 
             WikiApi apiClient = new WikiApi();
             String jsonResponse = apiClient.search(query);
 
             if (jsonResponse != null) {
-                logger.info("\nОтвет с сервера (JSON)");
-                logger.info(jsonResponse);
+                logger.debug("\nОтвет с сервера (JSON)");
+                logger.debug(jsonResponse);
             } 
             else {
                 logger.error("Не удалось получить данные с сервера Википедии.");
+            }
+
+            Parse parser = new Parse();
+            List<Article> articles = parser.parse(jsonResponse);
+
+            logger.debug("\nУспешно распаршено статей: " + articles.size());
+            for (Article article : articles) {
+                logger.debug("- " + article.getTitle() + " (ID: " + article.getPageid() + ")");
             }
 
             logger.info("Введите 0 для выхода\n");
