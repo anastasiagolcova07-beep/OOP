@@ -32,4 +32,32 @@ public class Input {
             return input;
         }
     }
+
+    public int getArticleChoice(int maxCount) {
+        while (true) {
+            logger.info("\nВведите номер статьи для открытия (от 1 до " + maxCount + "): ");
+            String input = scanner.nextLine();
+
+            if (input == null || input.trim().isEmpty()) {
+                logger.error("Ошибка: номер не может быть пустым. Попробуйте ещё раз.");
+                continue;
+            }
+
+            try {
+
+                int choice = Integer.parseInt(input.trim());
+
+                if (choice < 1 || choice > maxCount) {
+                    logger.error("Ошибка: выберите число строго от 1 до " + maxCount + ".");
+                    continue;
+                }
+
+                logger.info("Пользователь выбрал статью под номером: {}", choice);
+                return (choice - 1);
+            } 
+            catch (NumberFormatException e) {
+                logger.error("Ошибка: нужно ввести именно число!");
+            }
+        }
+    }
 }

@@ -33,13 +33,15 @@ public class Main {
             Parse parser = new Parse();
             List<Article> articles = parser.parse(jsonResponse);
 
-            // logger.debug("\nУспешно распаршено статей: " + articles.size());
-            // for (Article article : articles) {
-            //     logger.debug("- " + article.getTitle() + " (ID: " + article.getPageid() + ")");
-            // }
-
             Output outputWriter = new Output();
             outputWriter.printArticles(articles);
+
+            int choice = inputReader.getArticleChoice(articles.size());
+            if (choice > 0) {
+                Article selectedArticle = articles.get(choice);
+                OpenBrowser browser = new OpenBrowser();
+                browser.openArticle(selectedArticle.getPageid());
+            }
 
             logger.info("\nВведите 0 для выхода");
 
