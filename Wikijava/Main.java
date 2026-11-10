@@ -33,12 +33,15 @@ public class Main {
             Parse parser = new Parse();
             List<Article> articles = parser.parse(jsonResponse);
 
-            logger.debug("\nУспешно распаршено статей: " + articles.size());
-            for (Article article : articles) {
-                logger.debug("- " + article.getTitle() + " (ID: " + article.getPageid() + ")");
-            }
+            // logger.debug("\nУспешно распаршено статей: " + articles.size());
+            // for (Article article : articles) {
+            //     logger.debug("- " + article.getTitle() + " (ID: " + article.getPageid() + ")");
+            // }
 
-            logger.info("Введите 0 для выхода\n");
+            Output outputWriter = new Output();
+            outputWriter.printArticles(articles);
+
+            logger.info("\nВведите 0 для выхода");
 
             query = inputReader.getSearch();
         }
